@@ -6,7 +6,7 @@ public class CDSEfficiency
       int cooldown_level = 0; //1-15: R= 0.85^(0.40+0.85*level), 1: R=1
       double cooldown = 25;
       double cds = 3;
-      double roll_cooldown = 1.8;
+      double roll_cooldown = 2.5;
       ArrayList<Double> values = new ArrayList<Double>();
       double time_since_last_satchel = 0.0;//internal tracking of the time, this will always climb to cooldown
       double time_since_last_satchel_a = 0.0;//actual user experience !!WHAT WE NEED TO LOG
@@ -15,24 +15,40 @@ public class CDSEfficiency
       double offset = 0.01;
       ArrayList<Double> valuescollection = new ArrayList<Double>();
       //setup:
+              
+      Scanner input = new Scanner(System.in);
+      System.out.println("How long is the cooldown of the artifact?");
+      cooldown = input.nextDouble();
+      //process roll cooldown
+      System.out.println("How many levels of Acrobat do you have?");
+      roll_cooldown*=(1-0.15*input.nextDouble());
+      input.nextLine();
+      System.out.println("Do you have +100% roll cooldown?");
+      if(input.nextLine().toUpperCase().trim().equals("YES")) roll_cooldown *= 2;
+      System.out.println("Do you have +50% faster roll?");
+      if(input.nextLine().toUpperCase().trim().equals("YES")) roll_cooldown += 0.04;
+      roll_cooldown += 0.22;
+      System.out.println("How many levels of cooldown do you have? (cooldown armor perk counts as 3)");
+      cooldown *= Math.pow(0.85, (0.4+(0.85*(input.nextInt()))));
+      System.out.println("How many levels of cooldown shot do you have?");
+      cds = ((double)input.nextInt())/2;
+      System.out.println("How many arrows do you fire when you roll?"); 
+      arrow_count = input.nextInt();
+      cds *= arrow_count;
+      
       if(cooldown_level > 0)
          cooldown *= Math.pow(0.85, 0.4+0.85*cooldown_level);
       System.out.println(cooldown+ " seconds");
       
-      cds /= 2;
-      cds *= arrow_count;
+      //cds /= 2;
+      //cds *= arrow_count;
       int roll_count = 0;
       int interation = 0;
       double total_offset = 0.0;
+   
       
-      Scanner input = new Scanner(System.in);
-      System.out.println("How long is the cooldown of the artifact?");
-      System.out.println("How many levels of Acrobat do you have?");
-      System.out.println("Do you have +100% roll cooldown?");
-      System.out.println("Do you have +50% faster roll?");
-      System.out.println("How many levels of cooldown do you have? (cooldown armor perk counts as 3)");
-      System.out.println("How many levels of cooldown shot do you have?");
-      System.out.println("How many arrows do you fire when you roll?"); 
+      
+      
       while(total_offset < roll_cooldown){
          values.clear();
          time_total = total_offset;
