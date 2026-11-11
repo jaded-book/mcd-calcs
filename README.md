@@ -1,2 +1,2 @@
 # mcd-calcs
-A collection of code and calculations that I have done for Minecraft Dungeons
+A collection of code and calculations that I have done for Minecraft Dungeons.
