@@ -14,6 +14,7 @@ public class CDSEfficiency
       int arrow_count = 1; 
       double offset = 0.01;
       ArrayList<Double> valuescollection = new ArrayList<Double>();
+      double roll_inactive = 0.22;
       //setup:
               
       Scanner input = new Scanner(System.in);
@@ -26,8 +27,8 @@ public class CDSEfficiency
       System.out.println("Do you have +100% roll cooldown?");
       if(input.nextLine().toUpperCase().trim().equals("YES")) roll_cooldown *= 2;
       System.out.println("Do you have +50% faster roll?");
-      if(input.nextLine().toUpperCase().trim().equals("YES")) roll_cooldown += 0.04;
-      roll_cooldown += 0.22;
+      if(input.nextLine().toUpperCase().trim().equals("YES")) roll_inactive += 0.04;
+      roll_cooldown += roll_inactive;
       System.out.println("How many levels of cooldown do you have? (cooldown armor perk counts as 3)");
       cooldown *= Math.pow(0.85, (0.4+(0.85*(input.nextInt()))));
       System.out.println("How many levels of cooldown shot do you have?");
@@ -70,7 +71,23 @@ public class CDSEfficiency
                time_since_last_satchel += remains + cds;
                time_total += roll_cooldown;
             //add remaining roll time to both t_a and t, we'll be sure to check again to see if this was an insta cooldown
-            }else{                                                            //then we can roll, so add it
+            }//else if (time_since_last_satchel + roll_cooldown + cds > cooldown && 
+              //time_since_last_satchel + roll_cooldown + cds - cooldown > cds/2){     // if we can roll, but cds would be wasted, check if wasted > cds/2
+              // double would_be_waste = time_since_last_satchel + roll_cooldown + cds - cooldown;//store the wasted amount
+              // time_since_last_satchel += roll_cooldown + cds - would_be_waste;//update internal time
+              // time_since_last_satchel_a += roll_cooldown + cds - would_be_waste;//update external time
+               
+              // values.add(time_since_last_satchel_a);
+             //  time_since_last_satchel_a = 0;//reset
+               //time_since_last_satchel   = 0;//reset
+            
+            //time to update base on wasted time 
+               //time_since_last_satchel_a += roll_inactive;
+               //time_since_last_satchel += would_be_waste;
+               //time_total += roll_inactive;
+               
+            //}
+            else{                                                            //then we can roll un worried, so do it
                time_since_last_satchel += roll_cooldown + cds;
                time_total += roll_cooldown;
                time_since_last_satchel_a += roll_cooldown;
